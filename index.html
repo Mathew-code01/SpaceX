@@ -36,7 +36,7 @@
         <div id="searchMessage" class="searchMessage dark-mode">Heading not found. Please try again</div>
       </div>
         <button id="searchButton" class="dark-mode">Search</button>
-        <button id="clearButton" class="dark-mode">Clear</button>
+        <button id="clearButton" class="dark-mode" style="display: none;">Clear</button>
         <nav class="dark-mode ">  
           <ul>  
             <li><a href="#" class="dark-mode" id="home-btn">Home</a></li>  
@@ -688,83 +688,33 @@ document.getElementById('fileInput').addEventListener('change', function(event) 
 });
 
 // Scroll up and down style changes of #Side-div-settings
+let lastScrollY = window.scrollY;
 
-let lastScrolly = window.scrollY;
-
-window.addEventListener('scroll', function() {
+window.addEventListener('scroll', function () {
   const currentScroll = window.scrollY;
+  const sideDiv = document.getElementById('Side-div-settings');
+  const searchMessage = document.getElementById('searchMessage');
+  const suggestions = document.getElementById('suggestions');
 
-  if (currentScroll >= 0 && currentScroll < 20) {
-   document.getElementById('Side-div-settings').style.top = '52vh';
-   document.getElementById('searchMessage').style.display = 'none';
-   document.getElementById('suggestions').style.display = 'none';
-  } else if (currentScroll >= 20 && currentScroll <= 50) {
-    document.getElementById('Side-div-settings').style.top = '46vh';
-  } else if (currentScroll >= 50 && currentScroll <= 70) {
-    document.getElementById('Side-div-settings').style.top = '43vh';
-  } else if (currentScroll >= 70 && currentScroll <= 100) {
-    document.getElementById('Side-div-settings').style.top = '39vh';
-  }else if (currentScroll >= 100 && currentScroll <= 120) {
-    document.getElementById('Side-div-settings').style.top = '37vh';
-  }else if (currentScroll >= 120 && currentScroll <= 135) {
-    document.getElementById('Side-div-settings').style.top = '35vh';
-  }else if (currentScroll >= 135 && currentScroll <= 150) {
-    document.getElementById('Side-div-settings').style.top = '33vh';
-  }else if (currentScroll >= 150 && currentScroll <= 170) {
-    document.getElementById('Side-div-settings').style.top = '29vh';
-  }else if (currentScroll >= 170 && currentScroll <= 180) {
-    document.getElementById('Side-div-settings').style.top = '26vh';
-  }else if (currentScroll >= 180 && currentScroll <= 200) {
-    document.getElementById('Side-div-settings').style.top = '25vh';
-  }else if (currentScroll >= 200 && currentScroll <= 220) {
-    document.getElementById('Side-div-settings').style.top = '23vh';
-  }else if (currentScroll >= 220 && currentScroll <= 235) {
-    document.getElementById('Side-div-settings').style.top = '19vh';
-  }else if (currentScroll >= 235 && currentScroll <= 250) {
-    document.getElementById('Side-div-settings').style.top = '17vh';
-  }else if (currentScroll >= 250 && currentScroll <= 270) {
-    document.getElementById('Side-div-settings').style.top = '14vh';
-  }else if (currentScroll >= 270 && currentScroll <= 285) {
-    document.getElementById('Side-div-settings').style.top = '12vh';
-  }else if (currentScroll >= 285 && currentScroll <= 300) {
-    document.getElementById('Side-div-settings').style.top = '8vh';
-  }else if (currentScroll >= 300 && currentScroll <= 320) {
-    document.getElementById('Side-div-settings').style.top = '7vh';
-  }else if (currentScroll >= 320 && currentScroll <= 335) {
-    document.getElementById('Side-div-settings').style.top = '5vh';
-  }else if (currentScroll >= 335 && currentScroll <= 350) {
-    document.getElementById('Side-div-settings').style.top = '3vh';
-  }else if (currentScroll >= 350 && currentScroll <= 370) {
-    document.getElementById('Side-div-settings').style.top = '2vh';
-  }else if (currentScroll >= 370 && currentScroll <= 385) {
-    document.getElementById('Side-div-settings').style.top = '1vh';
-  }else if (currentScroll >= 385 && currentScroll <= 400) {
-    document.getElementById('Side-div-settings').style.top = '0vh';
-  }else if (currentScroll >= 400 && currentScroll <= 420) {
-    document.getElementById('Side-div-settings').style.top = '0vh';
-  }else if (currentScroll >= 420 && currentScroll <= 435) {
-    document.getElementById('Side-div-settings').style.top = '0vh';
-  }else if (currentScroll >= 435 && currentScroll <= 450) {
-    document.getElementById('Side-div-settings').style.top = '0vh';
-  }else if (currentScroll >= 450 && currentScroll <= 470) {
-    document.getElementById('Side-div-settings').style.top = '1vh';
-  }else if (currentScroll >= 450 && currentScroll <= 470) {
-    document.getElementById('Side-div-settings').style.top = '1vh';
-  }else if (currentScroll >= 470 && currentScroll <= 485) {
-    document.getElementById('Side-div-settings').style.top = '1vh';
-  }else if (currentScroll >= 485 && currentScroll <= 500) {
-    document.getElementById('Side-div-settings').style.top = '-1vh';
-  }else if (currentScroll >= 550 && currentScroll <= 570) {
-    document.getElementById('Side-div-settings').style.top = '-2vh';
-  }else if (currentScroll >= 570 && currentScroll <= 585) {
-    document.getElementById('Side-div-settings').style.top = '-4vh';
-  }else if (currentScroll >= 585 && currentScroll <= 600) {
-    document.getElementById('Side-div-settings').style.top = '-5vh';
-  }else {
-    document.getElementById('Side-div-settings').style.top = '-1vh';
-    document.getElementById('searchMessage').style.display = 'none';
-    document.getElementById('suggestions').style.display = 'none';
+  // Hide elements when scrolling up to 20px
+  if (currentScroll < 20) {
+    sideDiv.style.top = '52vh';
+    searchMessage.style.display = 'none';
+    suggestions.style.display = 'none';
+  } else {
+    // Dynamically adjust side-div-settings position based on scroll value
+    const offset = Math.max(0, 52 - (currentScroll / 10));
+    sideDiv.style.top = `${offset}vh`;
+
+    // Optional: Hide other elements based on scroll
+    if (currentScroll > 400) {
+      searchMessage.style.display = 'none';
+      suggestions.style.display = 'none';
+    }
   }
+
+  // Update the lastScrollY variable
+  lastScrollY = currentScroll;
 });
 
 // name container renameing
@@ -845,6 +795,8 @@ document.getElementById('searchInput').addEventListener('click', () => {
 //   "Space Craft"
 // ]
 
+let selectedSuggestionId = null; // To store the selected suggestion's ID
+
 
 //Function to filter items based on search input
 document.getElementById('searchButton').addEventListener('click', function() {
@@ -862,21 +814,21 @@ document.getElementById('searchButton').addEventListener('click', function() {
   } else if (searchInput === 'settings') {
     document.getElementById('settings-sidebar').style.display = 'block';
   } else {
-    // checking if the heading exist
-    const rect = searchInput;
-    if (searchInput) {
-      console.log('Element is already visible');
-      rect.scrollIntoViews({
-        top: searchInput.offsetTop,
-        behavior: 'smooth'
-      } );
-      
+    // Scroll to the selected suggestion or the search input if no suggestion was selected
+    if (selectedSuggestionId) {
+      scrollToElement(selectedSuggestionId);
+      selectedSuggestionId = null; // Reset after use
     } else {
-      console.log('Element is not visible, scrolling')
+      const matchingElement = document.getElementById(searchInput);
+      if (matchingElement) {
+        scrollToElement(searchInput);
+      } else {
+      console.log('Element is not visible, scrolling');
       
       searchMessage.style.display = 'block';
       document.getElementById('searchButton').style.display = 'none';
       document.getElementById('clearButton').style.display = 'block';
+      }
     }
   }
 
@@ -906,18 +858,18 @@ document.getElementById('searchInput').addEventListener('input', function() {
       "Astronomy Picture Of The Day",
       "Space Craft"
     ];
-    const Headings = [
-      { id: 'live-coverage'},
-      { id: 'ai-identifier'},
-      { id: 'space-guide'},
-      { id: 'space-news'},
-      { id: 'sos'},
-      { id: 'nasa-mission'},
-      { id: 'spaceX-launch'},
-      { id: 'photos-mars'},
-      { id: 'AstronomyPictureOfTheDay'},
-      { id: 'space-craft'}
-    ]
+    const ids = [
+        "live-coverage",
+        "ai-identifier",
+        "space-guide",
+        "space-news",
+        "sos",
+        "nasa-mission",
+        "spacex-launch",
+        "photos-mars",
+        "astronomy-picture-of-the-day",
+        "space-craft",
+      ];
     const filteredSUggestions =  headings.filter(item => item.toLowerCase().includes(searchInput));
 
     if (filteredSUggestions.length > 0) {
@@ -929,6 +881,7 @@ document.getElementById('searchInput').addEventListener('input', function() {
 
         // Add click event to suggestions
         suggestionItem.addEventListener('click', function() {
+          selectedSuggestionId = ids[index]; // Store the ID of the clicked suggestion
           document.getElementById('searchInput').value = suggestionItem.textContent.toLowerCase();
           document.getElementById('searchButton').click();
         });
@@ -944,19 +897,14 @@ document.getElementById('searchInput').addEventListener('input', function() {
   }
 });
 
-const toggleDisplay = (id, show) => {
-    const element = document.getElementById(id);
-    if (element) {
-        element.style.display = show ? 'block' : 'none';
-    }
-};
-
 const scrollToElement = (id) => {
     const element = document.getElementById(id);
     if (element) {
         element.scrollIntoView({ behavior: 'smooth', block: 'start' });
     } else {
-        displayMessage('Element not found. Please try another search.');
+      const searchMessage = document.getElementById('searchMessage');
+    searchMessage.textContent = 'Element not found. Please try another search.';
+    searchMessage.style.display = 'block';
     }
 };
 // Clear input field and reset UI
