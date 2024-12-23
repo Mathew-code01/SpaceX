@@ -140,6 +140,7 @@ nav ul li a:hover {
 .header {
     background-color: #fff;
     height: 40vh;
+    width: 100%;
     box-shadow: 0 2px 10px #4a90e2;
     display: flex;
     justify-content: center;
@@ -189,8 +190,8 @@ nav ul li a:hover {
 }
 
 #searchInput {
-    padding: 8px;
-    width: 150px;
+    padding: 10px;
+    width: 50%;
     box-shadow: 0 2px 6px transparent;
     margin-left: 2.5vh;
     border-radius: 35px;
@@ -334,6 +335,7 @@ input#image {
     padding: 0 5px 0 5px;
     font-size: 1rem;
     font-weight: bold;
+    width: 100%;
 }
 
 button {  
@@ -643,6 +645,18 @@ footer svg {
 
     a#profilemain {
         margin-bottom: 20px;
+    }
+
+    #searchInput {
+        width: 80%;
+    }
+
+    section h1 {
+        font-size: 2em;
+    }
+
+    section p {
+        font-size: 1.1em;
     }
 }
 
@@ -1017,5 +1031,124 @@ main#mainAccount h1 {
 @media (max-width: 620px) {
     main#mainAccount {
         max-width: 290px;
+    }
+}
+
+
+/* Adding of style to smaller phone */
+
+/* Media Query for Small Screens (Below 480px) */
+@media screen and (max-width: 480px) {
+    /* General Text and Layout Adjustments */
+    body {
+        font-size: 14px; /* Reduce font size for better fit */
+        line-height: 1.5; /* Ensure readability */
+    }
+
+    header {
+        flex-direction: column; /* Stack header elements vertically */
+        text-align: center;
+        padding: 1rem;
+    }
+
+    .logo {
+        font-size: 18px;
+    }
+
+    nav ul {
+        flex-direction: column; /* Stack nav items */
+        align-items: center;
+        gap: 10px;
+    }
+
+    nav ul li {
+        margin: 0;
+    }
+
+    nav ul li a {
+        font-size: 14px;
+    }
+
+    .header {
+        padding: 2rem 1rem; /* Add padding to prevent content overflow */
+    }
+
+    .header h1 {
+        font-size: 2rem; /* Reduce heading size */
+    }
+
+    .header p {
+        font-size: 1rem;
+    }
+
+    /* Search Container */
+    #searchInput {
+        width: 90%; /* Expand to fit screen */
+        font-size: 14px;
+    }
+
+    #searchButton,
+    #clearButton {
+        width: auto;
+        font-size: 14px; /* Adjust button font size */
+        padding: 0.5rem 1rem;
+    }
+
+    #Side-div-settings {
+        position: fixed;
+        right: 10px;
+        width: 90%; /* Adjust for smaller screens */
+        max-width: 300px; /* Optional: Limit the width */
+        transition: top 0.3s ease; /* Smooth transition for scroll */
+      }
+    
+      #searchMessage,
+      #suggestions {
+        font-size: 12px; /* Adjust font size */
+        padding: 0.5rem;
+      }
+
+    /* Containers */
+    .container,
+    .container.b {
+        width: 95%; /* Full width with padding */
+        margin: 10px auto;
+    }
+
+    h2 {
+        font-size: 1.5rem; /* Smaller headings */
+        text-align: center;
+    }
+
+    p {
+        font-size: 0.9rem;
+    }
+
+    /* Footer */
+    footer .container {
+        flex-direction: column;
+        align-items: center;
+    }
+
+
+    footer li {
+        margin: 5px 0;
+    }
+
+    footer svg {
+        width: 18px; /* Smaller icons */
+        height: 18px;
+        padding-right: 10px;
+    }
+
+    /* Buttons */
+    button {
+        font-size: 14px;
+        padding: 0.5rem 1rem;
+    }
+
+    /* Mobile Menu */
+    .mobile-nav {
+        width: 50%; /* Full width for smaller screens */
     }
 }
