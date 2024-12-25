@@ -10,7 +10,7 @@ import axios from 'axios';
 import path from "path";  
 import dotenv from 'dotenv';
 import { fileURLToPath } from 'url';  
-import console, { error } from "console";
+import console, { count, error } from "console";
 import { type } from "os";
 import multer from 'multer';
 import { MachineLearningModel } from './machineLearningModel.js';
@@ -196,76 +196,85 @@ app.post("/signin", async (req, res) => {
   }  
 });  
 
-app.post('/signup', async (req, res) => {  
-  console.log('Received sign-up request');  
-  const { signUpname, signUpemail, signUppassword } = req.body;  
+app.post('/signup', async (req, res) => {
+  console.log('Received sign-up request');
 
-  if (!signUpname || !signUpemail || !signUppassword) {  
-    return res.status(400).json({ message: 'All fields are required' });  
-  }  
+  const { signUpname, signUpemail, signUppassword } = req.body;
 
-  try {  
-    // Check if email already exists  
-    const existingUser = await retryWithBackoff(  
-      () => User.findOne({ email: signUpemail }).exec(),  
-      3, // Maximum number of retries  
-      2000 // Initial backoff delay in milliseconds  
-    );  
+  // Validate input
+  if (!signUpname || !signUpemail || !signUppassword) {
+    return res.status(400).json({ message: 'All fields are required' });
+  }
 
-    if (existingUser) {  
-      console.log('Email already in use');  
-      return res.status(400).json({ message: 'Email already in use' });  
-    }  
+  try {
+    // Check if email already exists using retry logic
+    const existingUser = await retryWithBackoff(
+      () => User.findOne({ email: signUpemail }).exec(),
+      3, // Maximum number of retries
+      2000 // Initial backoff delay in milliseconds
+    );
 
-    // Hash the password  
-    console.log('Hashing password');  
-    const hashedPassword = await bcrypt.hash(signUppassword, 10);  
+    if (existingUser) {
+      console.log('Email already in use');
+      return res.status(400).json({ message: 'Email already in use' });
+    }
 
-    // Save new user  
-    const user = new User({  
-      name: signUpname,  
-      email: signUpemail,  
-      password: hashedPassword,  
-    });  
+    // Hash the password
+    console.log('Hashing password');
+    const hashedPassword = await bcrypt.hash(signUppassword, 10);
 
-    await retryWithBackoff(  
-      () => user.save(),  
-      3, // Maximum number of retries  
-      2000 // Initial backoff delay in milliseconds  
-    );  
+    // Create a new user object
+    const user = new User({
+      name: signUpname,
+      email: signUpemail,
+      password: hashedPassword,
+    });
 
-    console.log('User saved successfully');  
-    res.status(201).json({ message: 'Signed up successfully', redirect: '/signin' });  
+    // Save the new user using retry logic
+    await retryWithBackoff(
+      () => user.save(),
+      3, // Maximum number of retries
+      2000 // Initial backoff delay in milliseconds
+    );
 
-  } catch (error) {  
-    console.error('Error during sign up:', error);  
-    res.status(500).json({ error: 'Failed to sign up' });  
-  }  
-});  
+    console.log('User saved successfully');
+    res.status(201).json({ message: 'Signed up successfully', redirect: '/signin' });
+  } catch (error) {
+    console.error('Error during sign up:', error);
+    res.status(500).json({ error: 'Failed to sign up' });
+  }
+});
 
-async function retryWithBackoff(operation, maxRetries, initialBackoffDelay) {  
-  let retryCount = 0;  
-  let backoffDelay = initialBackoffDelay;  
+/**
+ * Utility function for retrying operations with exponential backoff
+ * @param {Function} operation - The async operation to retry
+ * @param {number} maxRetries - Maximum number of retries
+ * @param {number} initialBackoffDelay - Initial backoff delay in milliseconds
+ */
+async function retryWithBackoff(operation, maxRetries, initialBackoffDelay) {
+  let retryCount = 0;
+  let backoffDelay = initialBackoffDelay;
 
-  while (retryCount < maxRetries) {  
-    try {  
-      return await operation();  
-    } catch (error) {  
-      if (error.name === 'MongooseTimeoutError') {  
-        console.error(`Retrying operation after ${backoffDelay}ms delay...`, error);  
-        await new Promise(resolve => setTimeout(resolve, backoffDelay));  
-        backoffDelay *= 2; // Exponential backoff  
-        retryCount++;  
-      } else {  
-        throw error;  
-        console.log(error);  
-      }  
-    }  
-  }  
+  while (retryCount < maxRetries) {
+    try {
+      return await operation();
+    } catch (error) {
+      if (error.name === 'MongooseTimeoutError') {
+        console.error(`Retrying operation after ${backoffDelay}ms delay...`, error);
+        await new Promise((resolve) => setTimeout(resolve, backoffDelay));
+        backoffDelay *= 2; // Exponential backoff
+        retryCount++;
+      } else {
+        throw error; // Re-throw non-timeout errors
+      }
+    }
+  }
 
   throw new Error('Maximum number of retries reached. Operation failed.');
-  
 }
+
+
+
 
 
 
@@ -362,7 +371,7 @@ app.post('/api/ai-identifier', upload.single('image'),
 // Endpoint to fetch space guide data
 app.get("/api/space-guide", async (req, res) => {
   try {
-    const response = await axios.get(`http://api.open-notify.org/iss-now.json`);
+    const response = await axios.get(`https://api.nasa.gov/planetary/apod?api_key=${nasaApi}`);
     if (response.status !== 200) {
       throw new Error(`NASA API returned status ${response.status}`);
     }if (response.status === 200) {
@@ -389,40 +398,32 @@ app.get('/api/apod', async (req, res) => {
 // Endpoint to fetch space news  
 app.get('/api/space-news', async (req, res) => {
   try {
-    const response = await axios.get('https://newsapi.org/v2/everything', {
+    const response = await axios.get('https://api.nasa.gov/planetary/apod', {
       params: {
-        q: 'space',  // Search query for space-related articles
-        apiKey: nasaApi,
-        pageSize: 5,  // Fetch only 5 articles
+        api_key: nasaApi,
+        count: 5,
       },
     });
 
-    // Log the full response data to see if it includes articles
-    console.log("API Response Data:", JSON.stringify(response.data, null, 2));
+    console.log("NASA API Response:", response.data);
 
-    if (response.status !== 200) {
-      return res.status(response.status).json({ error: "Failed to fetch space news" });
+    if (!response.data || !Array.isArray(response.data)) {
+      return res.status(500).json({ error: "Unexpected API response structure" });
     }
 
-    const articles = response.data.articles.map(article => ({
-      title: article.title || 'No Title Available',
-      description: article.description || 'No Description Available',
-      url: article.url || '#',
+    const articles = response.data.map(item => ({
+      title: item.title || 'No Title Available',
+      description: item.explanation || 'No Description Available',
+      url: item.url || '#',
     }));
-    
-    
-    if (!articles || !Array.isArray(articles) || articles.length === 0) {
-      console.error("No articles found in API response:", response.data);
-      return res.status(404).json({ error: "No articles found" });
-    }
-    
 
     res.json(articles);
   } catch (error) {
-    console.error(error);
+    console.error("Error fetching data from NASA API:", error.message);
     res.status(500).json({ error: "Failed to fetch space news. Please try again later." });
   }
 });
+
 
 
 // Endpoint to fetch Mars rover photos  
