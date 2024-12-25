@@ -1,364 +1,238 @@
-// import axios from 'axios';
+(function () {
 
-   // Get the menu icon and navigation menu elements  
-const menuIcon = document.querySelector('.menu-icon');  
-const navMenu = document.querySelector('nav ul');  
+  'use strict';
 
-// Add event listener to the menu icon  
-menuIcon.addEventListener('click', () => {  
-    menuIcon.classList.toggle('hidden');  
-    navMenu.classList.toggle('show');  
-}); 
+  var assign = require('object-assign');
+  var vary = require('vary');
 
+  var defaults = {
+    origin: '*',
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    preflightContinue: false,
+    optionsSuccessStatus: 204
+  };
 
-  // SOS Message functionality
-const sosForm = document.getElementById('sos-form');
-const sosMessageInput = document.getElementById('sos-message');
+  function isString(s) {
+    return typeof s === 'string' || s instanceof String;
+  }
 
-sosForm.addEventListener('submit', async (e) => {
-  e.preventDefault();
-  const sosMessage = sosMessageInput.value.trim();
-  if (sosMessage) {
-    try {
-      const response = await axios.post('/api/sos', { message: sosMessage });
-      console.log(response.data);
-      sosMessageInput.value = '';
-    } catch (error) {
-      alert(error.message);
+  function isOriginAllowed(origin, allowedOrigin) {
+    if (Array.isArray(allowedOrigin)) {
+      for (var i = 0; i < allowedOrigin.length; ++i) {
+        if (isOriginAllowed(origin, allowedOrigin[i])) {
+          return true;
+        }
+      }
+      return false;
+    } else if (isString(allowedOrigin)) {
+      return origin === allowedOrigin;
+    } else if (allowedOrigin instanceof RegExp) {
+      return allowedOrigin.test(origin);
+    } else {
+      return !!allowedOrigin;
     }
   }
-});
 
- 
+  function configureOrigin(options, req) {
+    var requestOrigin = req.headers.origin,
+      headers = [],
+      isAllowed;
 
-// // Sign In functionality
-// const signInForm = document.getElementById('sign-in-form');
-// const signInEmailInput = document.getElementById('sign-in-email');
-// const signInPasswordInput = document.getElementById('sign-in-password');
-// const signinresponds = document.getElementById('sign-in-responds');
+    if (!options.origin || options.origin === '*') {
+      // allow any origin
+      headers.push([{
+        key: 'Access-Control-Allow-Origin',
+        value: '*'
+      }]);
+    } else if (isString(options.origin)) {
+      // fixed origin
+      headers.push([{
+        key: 'Access-Control-Allow-Origin',
+        value: options.origin
+      }]);
+      headers.push([{
+        key: 'Vary',
+        value: 'Origin'
+      }]);
+    } else {
+      isAllowed = isOriginAllowed(requestOrigin, options.origin);
+      // reflect origin
+      headers.push([{
+        key: 'Access-Control-Allow-Origin',
+        value: isAllowed ? requestOrigin : false
+      }]);
+      headers.push([{
+        key: 'Vary',
+        value: 'Origin'
+      }]);
+    }
 
-// signInForm.addEventListener('submit', async (e) => {
-//   e.preventDefault();
-//   const email = signInEmailInput.value.trim();
-//   const password = signInPasswordInput.value.trim();
-//   if (email && password) {
-//     console.log(email,password);
-//     try {
-//       const response = await axios.post('/signin', { email, password });
-      
-//       // Process the data
-//       if (response.ok) {
-//         signinresponds.textContent = "Signed in successsfully";
-//       } else {
-//         signinresponds.textContent = "Sign in unsuccessful"
-//       }
-      
-      
-
-//     } catch (error) {
-      
-//       console.error(error);
-//     }
-//   } else {
-//     displayError('Please fill in all fields');
-//     return false;
-
-//   }
-// });
-
-//        // Sign Up functionality
-//        const signUpForm = document.getElementById('sign-up-form');
-//        const signUpNameInput = document.getElementById('sign-up-name');
-//        const signUpEmailInput = document.getElementById('sign-up-email');
-//        const signUpPasswordInput = document.getElementById('sign-up-password');
-//        const signupresponds = document.getElementById('sign-up-responds');
-       
-//        signUpForm.addEventListener('submit', async (e) => {
-//          e.preventDefault();
-//          const signUpname = signUpNameInput.value.trim();
-//          const signUpemail = signUpEmailInput.value.trim();
-//          const signUppassword = signUpPasswordInput.value.trim();
-//          if (signUpname && signUpemail && signUppassword) {
-//            try {
-//              const response = await axios.post('/signup', { signUpname, signUpemail, signUppassword });
-//              alert.log(response.data);
-       
-//              // Process the data
-//              if (response.ok) {
-//                signupresponds.textContent = "Signed up successsfully";
-//              } else {
-//                signupresponds.textContent = "Sign up unsuccessful"
-//              }
-             
-//            } catch (error) {
-//              console.error(error);
-//              if (error) {
-//                signupresponds.textContent = `An error occurred:${error}`;
-//              } 
-//            }
-//          }
-//        });
-       
-       // toggle-password-icon
-       
-       document.getElementById('toggle-password-icon').addEventListener('click', function() {
-           const togglePasswordIcon = document.querySelector('i #toggle-password-icon .fa');
-       
-           // Toggle password visibility
-           if (signUpPasswordInput.type === 'pasword') {
-               togglePasswordIcon.classList.add('fa-unlock');
-               togglePasswordIcon.classList.remove('fa-lock');
-               
-           } else {
-               signUpEmailInput.type = 'password'; // Hide Password
-               togglePasswordIcon.classList.remove('fa-unlock');
-               togglePasswordIcon.classList.add('fa-lock');
-           }if (error) {
-               console.error(error);
-               signupresponds.textContent = `An error occurred:${error}`;
-             } 
-       });
-
-// Logout Functionality
-
-document.getElementById('logout-btn').addEventListener('click', () => {
-  document.getElementById('confirmation-dialog').style.display = 'block';
-});
-
-document.getElementById('no-btn').addEventListener('click', () => {
-  document.getElementById('confirmation-dialog').style.display = 'none';
-});
-
-
-// // Confirmation Dialog
-// document.getElementById('yes-btn').addEventListener('click', async () => {
-//   try {
-//     const response = await fetch('/api/logout', { 
-//       method:'POST'});
-//       if (response.ok) {
-//         document.getElementById('sign')
-//       }
-
-//   }
-// })
-
-
-
-// Toggle Switch 
-
-async function DarkMode() {
-  const themeToggle = document.getElementById('theme-toggle');
-  themeToggle.addEventListener('click', () => {
-   document.body.classList.toggle('dark-mode');
-   document.querySelectorAll('header, footer').forEach((element) => {
-     element.classList.toggle('dark-mode');
-   });
-   document.querySelectorAll('.container.b').forEach((container) => {
-     container.classList.toggle('dark-container');
-   });
-   document.querySelectorAll('button').forEach((button) => {
-     button.classList.toggle('dark-mode');
-   });
- 
-   document.querySelectorAll('h2, p').forEach((element) => {
-     element.classList.toggle('dark-text-head');
-   });
-
-   document.querySelectorAll('nav').forEach((element) => {
-      element.classList.toggle('dark-mode');
-   });
- 
-   document.querySelectorAll('svg').forEach((svg) => {
-     svg.classList.toggle('dark-mode');
-   });
-   localStorage.setItem('theme',
-     document.body.classList.contains('dark-mode') ? 'dark': 'light'
-   );
-   document.body.classList.toggle('light-mode');
- });
+    return headers;
   }
 
-  
-  
- 
- // Set initial theme based on local storage
- const initialTheme = localStorage.getItem('theme');
- if (initialTheme === 'dark') {
-   document.body.classList.add('dark-mode');
- }
-
-// Get the menu icon and the mobile nav element  
-const menuicon = document.getElementById('menu-icon');  
-const mobileNav = document.querySelector('nav');  
-
-// Toggle the mobile nav when the menu icon is clicked  
-menuicon.addEventListener('click', () => {  
-mobileNav.classList.toggle('show'); 
-mobileNav.classList.toggle('mobile-nav');
-mobileNav.classList.toggle('nav');
-menuicon.classList.toggle('menu-icon');
-
-
-});
-
-// Live Coverage functionality
-const liveCoverageList = document.getElementById('live-coverage-list');
-
-async function fetchLiveCoverage() {
-try {
-  const response = await fetch('/api/live-coverage');
-  const liveCoverage = response.data;
-  liveCoverageList.innerHTML = '';
-  liveCoverage.forEach((item) => {
-    const listItem = document.createElement('li');
-    listItem.textContent = item;
-    liveCoverageList.appendChild(listItem);
-  });
-} catch (error) {
-  console.error(error);
-}
-}
-
-
-
-// AI Identifier functionality
-
-
-async function fetchAiIdentifier() {
-  try {
-    const image = document.getElementById('image').files[0];
-    const formData = new FormData();
-    formData.append('image', image); 
-    const response = await fetch('/api/ai-identifier', {
-      method: 'POST',
-      body: formData
-    });
-    const data = await response.json();
-    const aiIdentifierResult = document.getElementById('ai-identifier-result');
-    aiIdentifierResult.textContent = data.result.join(', ');
-  } catch (error) {
-    console.error(error);
+  function configureMethods(options) {
+    var methods = options.methods;
+    if (methods.join) {
+      methods = options.methods.join(','); // .methods is an array, so turn it into a string
+    }
+    return {
+      key: 'Access-Control-Allow-Methods',
+      value: methods
+    };
   }
-};
 
-
-
-// Space Guide functionality
-async function fetchSpaceGuide() {
-try {
-  const response = await fetch('/api/space-guide');
-  if (!response.ok) {
-    throw new Error('Network response was not ok');
+  function configureCredentials(options) {
+    if (options.credentials === true) {
+      return {
+        key: 'Access-Control-Allow-Credentials',
+        value: 'true'
+      };
+    }
+    return null;
   }
-  const data = await response.json();
-  // Process the data
-  document.getElementById('space-guide-info').innerHTML = `
-    <h2>${data.title}</h2>
-      <p>${data.explanation}</p>
-      <img src="${data.url}" alt="${data.title}" />
-    <p><strong>Copyright:</strong> ${data.copyright}</p>
-    <a href="${data.hdurl}" target="_blank">View High-Definition Image</a>
-  `;
-} catch (error) {
-  console.error('Error fetching space guide:', error);
-  document.getElementById('space-guide-info').innerHTML = 'Failed to load space guide.';
-}
-}
 
+  function configureAllowedHeaders(options, req) {
+    var allowedHeaders = options.allowedHeaders || options.headers;
+    var headers = [];
 
+    if (!allowedHeaders) {
+      allowedHeaders = req.headers['access-control-request-headers']; // .headers wasn't specified, so reflect the request headers
+      headers.push([{
+        key: 'Vary',
+        value: 'Access-Control-Request-Headers'
+      }]);
+    } else if (allowedHeaders.join) {
+      allowedHeaders = allowedHeaders.join(','); // .headers is an array, so turn it into a string
+    }
+    if (allowedHeaders && allowedHeaders.length) {
+      headers.push([{
+        key: 'Access-Control-Allow-Headers',
+        value: allowedHeaders
+      }]);
+    }
 
-// Call fetch function when the page loads  
-window.onload = fetchAstronomyPictureOfTheDay;
+    return headers;
+  }
 
+  function configureExposedHeaders(options) {
+    var headers = options.exposedHeaders;
+    if (!headers) {
+      return null;
+    } else if (headers.join) {
+      headers = headers.join(','); // .headers is an array, so turn it into a string
+    }
+    if (headers && headers.length) {
+      return {
+        key: 'Access-Control-Expose-Headers',
+        value: headers
+      };
+    }
+    return null;
+  }
 
+  function configureMaxAge(options) {
+    var maxAge = (typeof options.maxAge === 'number' || options.maxAge) && options.maxAge.toString()
+    if (maxAge && maxAge.length) {
+      return {
+        key: 'Access-Control-Max-Age',
+        value: maxAge
+      };
+    }
+    return null;
+  }
 
+  function applyHeaders(headers, res) {
+    for (var i = 0, n = headers.length; i < n; i++) {
+      var header = headers[i];
+      if (header) {
+        if (Array.isArray(header)) {
+          applyHeaders(header, res);
+        } else if (header.key === 'Vary' && header.value) {
+          vary(res, header.value);
+        } else if (header.value) {
+          res.setHeader(header.key, header.value);
+        }
+      }
+    }
+  }
 
+  function cors(options, req, res, next) {
+    var headers = [],
+      method = req.method && req.method.toUpperCase && req.method.toUpperCase();
 
-async function fetchAstronomyPictureOfTheDay() {  
-  try {  
-    const response = await fetch('/api/apod');  
-    const apodData = await response.json();  
-    console.log(apodData);  
+    if (method === 'OPTIONS') {
+      // preflight
+      headers.push(configureOrigin(options, req));
+      headers.push(configureCredentials(options, req));
+      headers.push(configureMethods(options, req));
+      headers.push(configureAllowedHeaders(options, req));
+      headers.push(configureMaxAge(options, req));
+      headers.push(configureExposedHeaders(options, req));
+      applyHeaders(headers, res);
 
-    if (apodData && apodData.url && apodData.title && apodData.explanation) {  
-      document.getElementById('space-guide-info').innerHTML = `  
-        <h2>${apodData.title}</h2>  
-        <img src="${apodData.url}" alt="${apodData.title}" />  
-        <p>${apodData.explanation}</p>  
-      `;  
-    } else {  
-      document.getElementById('space-guide-info').innerText = 'Failed to load Astronomy Picture of the Day';  
-    }  
-  } catch (error) {  
-    console.error(error);  
-    document.getElementById('space-guide-info').innerText = 'Failed to load Astronomy Picture of the Day';  
-  }  
-}
+      if (options.preflightContinue) {
+        next();
+      } else {
+        // Safari (and potentially other browsers) need content-length 0,
+        //   for 204 or they just hang waiting for a body
+        res.statusCode = options.optionsSuccessStatus;
+        res.setHeader('Content-Length', '0');
+        res.end();
+      }
+    } else {
+      // actual response
+      headers.push(configureOrigin(options, req));
+      headers.push(configureCredentials(options, req));
+      headers.push(configureExposedHeaders(options, req));
+      applyHeaders(headers, res);
+      next();
+    }
+  }
 
+  function middlewareWrapper(o) {
+    // if options are static (either via defaults or custom options passed in), wrap in a function
+    var optionsCallback = null;
+    if (typeof o === 'function') {
+      optionsCallback = o;
+    } else {
+      optionsCallback = function (req, cb) {
+        cb(null, o);
+      };
+    }
 
-async function fetchSpaceNews() {
-try {
-  const response = await fetch('/api/space-news');
-  const data = await response.json();  // Ensure this is correct
-  const articles = data.articles; // Assuming the articles are in the "articles" key
-  const newsList = articles.map(article => `
-    <li>
-      <h3>${article.title}</h3>
-      <p>${article.summary}</p>
-      <a href="${article.url}" target="_blank">Read more</a>
-    </li>
-  `).join('');
-  document.getElementById('space-news-list').innerHTML = newsList;
-} catch (error) {
-  console.error(error);
-  document.getElementById('space-news-list').innerText = 'Failed to load space news';
-}
-}
+    return function corsMiddleware(req, res, next) {
+      optionsCallback(req, function (err, options) {
+        if (err) {
+          next(err);
+        } else {
+          var corsOptions = assign({}, defaults, options);
+          var originCallback = null;
+          if (corsOptions.origin && typeof corsOptions.origin === 'function') {
+            originCallback = corsOptions.origin;
+          } else if (corsOptions.origin) {
+            originCallback = function (origin, cb) {
+              cb(null, corsOptions.origin);
+            };
+          }
 
+          if (originCallback) {
+            originCallback(req.headers.origin, function (err2, origin) {
+              if (err2 || !origin) {
+                next(err2);
+              } else {
+                corsOptions.origin = origin;
+                cors(corsOptions, req, res, next);
+              }
+            });
+          } else {
+            next();
+          }
+        }
+      });
+    };
+  }
 
-async function fetchMarsRoverPhotos() {
-try {
-  const response = await fetch('/api/mars-rover-photos'); // Correct endpoint for Mars Rover photos
-  const photos = await response.json();  // Get photo data
-  const photoList = photos.map(photo => {
-    const img = document.createElement('img');
-    img.src = photo.img_src; // Make sure 'img_src' is the correct field
-    img.alt = 'Mars Rover Photo';
-    img.style.width = '200px';
-    img.style.margin = '5px';
-    return img.outerHTML; // Correctly add the image elements
-  }).join('');
-  document.getElementById('photos-mars-result').innerHTML = photoList;
-} catch (error) {
-  console.error(error);
-  document.getElementById('photos-mars-result').innerText = 'Failed to load Mars rover photos';
-}
-}
+  // can pass either an options hash, an options delegate, or nothing
+  module.exports = middlewareWrapper;
 
-
-
-// Function to initialize the app by fetching all necessary data  
-async function initializeApp() {  
-await fetchAstronomyPictureOfTheDay(); // Fetch APOD  
-await fetchSpaceNews(); // Fetch space news  
-await fetchMarsRoverPhotos(); // Fetch Mars rover photos  
-await fetchSpaceGuide(); //
-await fetchAiIdentifier();
-await fetchLiveCoverage();
-
-}  
-
-// Immediately invoke the initialize function on DOM content loaded  
-document.addEventListener('DOMContentLoaded', (event) => {  
-initializeApp();  // Call the function to initialize the app  
-}); 
-
-
-const MainIndex = document.getElementById('mainIndex');
-const MainProfile = document.getElementById('mainProfile');
-const profileMain = document.querySelector('a#profilemain');
-
-profileMain.addEventListener('click', () => {
-  MainIndex.style.display = 'none';
-  MainProfile.style.display = 'block';
-});
+}());
