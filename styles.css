@@ -27,7 +27,7 @@ button.dark-mode {
 }
 
 button.dark-mode:hover {
-    background-color: #114477;
+    background-color: #d8d1c6;
 }
 
 footer.dark-mode {
@@ -73,6 +73,7 @@ p.dark-mode {
     box-shadow: 0 2px 10px #fff;
     padding: 10px 15px;
     border-radius: 8px; /* Rounded corners */
+    color: #ffffff;
 }
 
 .dark-mode-icon {
@@ -145,7 +146,10 @@ nav ul li a:hover {
     box-shadow: 0 2px 10px #4a90e2;
     display: flex;
     justify-content: center;
-    
+    background-image: url("SPACEX.webp");
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-position: center;
     flex-direction: column;
 }
 
@@ -231,7 +235,7 @@ nav ul li a:hover {
 }
 
 #searchButton:hover {
-    background-color: #3e79c1;
+    background-color: #d8d1c6;
 }
 
 #clearButton {
@@ -379,6 +383,7 @@ button.more-button {
     background-color: #fff;
     border: 2px #4a90e2 solid;
     border-radius: 4px;
+    margin-left: -10px;
 }
 
 button.more-button:hover {
@@ -411,7 +416,7 @@ div#yes-or-no {
 }
 
 div.comfirmation-dialog h4.dark-mode {
-    background-color: #21283f;
+    background-color: #000000;
     color: #fff;
 }
 
@@ -447,9 +452,9 @@ div.comfirmation-dialog p.dark-mode {
 
 
 .comfirmation-dialog.dark-mode {
-    background-color: #2c2f33;
     border-radius: 8px;
-    box-shadow: 0 2px 10px #4a90e2; /* Subtle shadow effect */
+    box-shadow: 0 2px 6px #717171;
+    background-color: #161616;
     align-items: center;
     display: flex;
 }
@@ -478,11 +483,15 @@ div.comfirmation-dialog p.dark-mode {
 }
 
 .comfirmation-dialog button.dark-mode {
-    background-color: #21285f;
+    background-color: #000000;
+}
+
+.comfirmation-dialog button.dark-mode:hover {
+    background-color: #717171;
 }
 
 div.register-dialog h4.dark-mode {
-    background-color: #21283f;
+    background-color: #000000;
     color: #fff;
 }
 
@@ -516,9 +525,9 @@ div.register-dialog {
 
 
 .register-dialog.dark-mode {
-    background-color: #2c2f33;
     border-radius: 8px;
-    box-shadow: 0 2px 10px #4a90e2; /* Subtle shadow effect */
+    box-shadow: 0 2px 6px #717171;
+    background-color: #161616;
     align-items: center;
     display: flex;
 }
@@ -547,7 +556,11 @@ div.register-dialog {
 }
 
 .register-dialog button.dark-mode {
-    background-color: #21285f;
+    background-color: #000000;
+}
+
+.register-dialog button.dark-mode:hover {
+    background-color: #717171;
 }
 
 footer {
@@ -626,16 +639,12 @@ footer svg {
     fill: #ffffff;  
 }  
 
-footer div.w-full p {
-    font-size: 3vh;
-}
-
 footer div.w-full.p {
     display: flex;
     align-items: center;
     justify-content: space-between;
     padding: 10px;
-    border-top: 3px solid #717171;
+    border-top: 3px solid #ffffff;
 }
 
 footer div.Icons {
@@ -643,7 +652,7 @@ footer div.Icons {
 }
 
 footer h1 {
-    font-size: 3rem;
+    font-size: 2rem;
 }
 
 
@@ -667,6 +676,10 @@ h3 {
     list-style: none;
     font-size: 16px;
   }
+
+footer div.container button {
+    background-color: none;
+}
 
 #space-guide-info {  
     margin-top: 20px;  
@@ -712,10 +725,6 @@ h3 {
         width: 100vw;
      }
       
-      .Icons, .contact-item {
-        margin-bottom: 15px;
-      }
-    
       footer ul {
         align-items: center;
       }
@@ -816,7 +825,7 @@ h3 {
   } 
 
   nav.dark-mode {
-    background-color: #21283f;
+    background-color: #000000;
   }
   
   .mobile-nav.show {  
@@ -879,7 +888,8 @@ main#mainProfile h2 {
 }
 
 #mainProfile.dark-mode {
-    background-color: #2c2f20;
+    box-shadow: 0 2px 6px #717171;
+    background-color: #161616;
 }
 
 #mainProfile {
@@ -943,7 +953,7 @@ form#settings-form label {
 }
 
 #settings-sidebar.dark-mode {
-    background-color: #21283f;
+    background-color: #000000;
   }
 
 
@@ -982,13 +992,15 @@ select:focus option:hover {
     visibility: hidden;
     opacity: 0;
     transition: opacity 0.3s;
-    margin-left: 30px;
-    margin-bottom: 35px;
+    margin-left: 17px;
+    margin-bottom: 25px;
+    margin-top: -8px;
     font-size: 14px;
+    padding: 0.5rem 2rem;
 }
 
 .less.name {
-    margin-left: -130px;
+    margin-left: -178px;
 }
 
 .message.name {
@@ -997,8 +1009,8 @@ select:focus option:hover {
 }
 
 .name.dark-mode {
-    background-color: #21285f;
-    color: #ffffff; 
+    background-color: #d8d1c6;
+    color: #000000; 
 }
 
 button:hover .name {
@@ -1027,7 +1039,8 @@ main#mainAccount h1 {
 }
 
 #mainAccount.dark-mode {
-    background-color: #2c2f20;
+    box-shadow: 0 2px 6px #717171;
+    background-color: #161616;
 }
 
 #mainAccount {
@@ -1142,13 +1155,11 @@ main#mainAccount h1 {
 
     .header {
         padding: 2rem 1rem; /* Add padding to prevent content overflow */
-        height: 20vh;
-        width: 93%;
+        width: 90%;
     }
 
     .header h1 {
         font-size: 2rem; /* Reduce heading size */
-        padding: 0px;
     }
 
     .header p {
@@ -1221,6 +1232,10 @@ main#mainAccount h1 {
         font-size: 0.9rem;
     }
 
+    .name {
+        padding: 0.5rem;
+    }
+
     /* Footer */
     footer .container {
         flex-direction: column;
@@ -1264,10 +1279,6 @@ main#mainAccount h1 {
     
       p {
         font-size: 14px; /* Smaller font for paragraphs */
-      }
-    
-      .Icons {
-        margin-top: 10px;
       }
     
       .Icons h3 {
