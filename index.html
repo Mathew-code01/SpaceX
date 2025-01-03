@@ -63,7 +63,7 @@
 
 
         <!-- Comfirmation Dialog -->
-        <div id="comfirmation-dialog" class="comfirmation-dialog dark-mode" style="display: none; position: fixed; left: 50%; transform: translate(-50%, 50%); border: 1px solid #4a90e2; padding: 20px; z-index: 1000;">
+        <div id="comfirmation-dialog" class="comfirmation-dialog dark-mode" style="display: none; position: fixed; left: 50%; transform: translate(-50%, 50%); border: 1px solid #717171; padding: 20px; z-index: 1000;">
           <h4 class="dark-mode">Logout</h4>
            <p>Are you sure you want to logout?</p>
            <div id="yes-or-no">
@@ -74,7 +74,7 @@
       
 
          <!-- Register Dialog -->
-         <div id="register-dialog" class="register-dialog dark-mode" style="display: none; position: fixed; left: 50%; transform: translate(-50%, 50%); border: 1px solid #4a90e2; padding: 20px; z-index: 1000;">
+         <div id="register-dialog" class="register-dialog dark-mode" style="display: none; position: fixed; left: 50%; transform: translate(-50%, 50%); border: 1px solid #717171; padding: 20px; z-index: 1000;">
           <h4 class="dark-mode">Create Account</h4>
            <p>Are you sure you want to create another account?</p>
            <div id="yes-or-no">
@@ -95,7 +95,7 @@
             <div class="curve"></div>
 
             <!-- side div settings -->
-      <div id="Side-div-settings">
+      <!-- <div id="Side-div-settings">
         <li>
           <button id="settings-toggle" class="dark-mode">
               <i class="fas fa-cog"></i>
@@ -120,7 +120,7 @@
               </span>
           </button>
         </li>
-      </div>
+      </div> -->
       
       <aside id="settings-sidebar" class="dark-mode" style="display: none;">
         <h2 class="dark-mode">Settings</h2>
@@ -324,10 +324,49 @@
              
             <div class="Icons w-full">
               <h3 class="text -lg font-bold dark-mode ">Quick Links</h3>
-              <div class="Icons home"><h3>Home</h3></div>
-              <div class="Icons profile"><h3>Profile</h3></div>
-              <div class="Icons logout"><h3>Logout</h3></div>
-              <div class="Icons login"><h3>Login</h3></div>
+                          <!-- side div settings -->
+      
+        <li>
+          <button id="settings-toggle" class="dark-mode">
+              <i class="fas fa-cog"></i>
+              <span class="settings name dark-mode">
+                Settings
+              </span>
+          </button>
+        </li>
+        <li>
+          <button id="portfolio-toggle"  class="dark-mode">
+              <i class="fas fa-briefcase"></i>
+              <span class="portfolio name dark-mode">
+                Portfolio
+              </span>
+          </button>
+        </li>
+        <li>
+          <button id="account-toggle"  class="dark-mode">
+            <i class="fas fa-user"></i>
+              <span class="account name dark-mode">
+                Me
+              </span>
+          </button>
+        </li>
+
+        <li>
+          <button id="portfolio-toggle"  class="dark-mode">
+            <i class="fas fa-sign-in-alt"></i>
+            <span class="portfolio name dark-mode">
+              Login
+            </span>
+        </button>
+        </li>
+        <li>
+          <button id="portfolio-toggle"  class="dark-mode">
+            <i class="fas fa-sign-out-alt"></i>
+            <span class="portfolio name dark-mode">
+              Logout
+            </span>
+        </button>
+        </li>
             </div>
 
             <div class="w-full">
@@ -355,7 +394,7 @@
           </div>
             
         </div>
-        <div class="w-full p lg:w-1/2 border-t" style="border-color: #717171;">
+        <div class="w-full p lg:w-1/2">
           <p class="dark-mode">&copy; 2024 Earth-Space Communication App</p> 
           <div class="w-full lg:w-1/2">
             
@@ -587,12 +626,14 @@ document.getElementById('font-family').addEventListener('change', () => {
 
 document.querySelector('a#logout-btn').addEventListener('click', () => {
   document.getElementById('overlay').style.display = 'block';
+  document.getElementById('register-dialog').style.display = 'none';
   document.getElementById('comfirmation-dialog').style.display = 'flex';
 });
 
 // register functionality
 
 document.querySelector('a#register-btn').addEventListener('click', () => {
+  document.getElementById('comfirmation-dialog').style.display = 'none';
   document.getElementById('register-dialog').style.display = 'flex';
   document.getElementById('overlay').style.display = 'block';  
 });
